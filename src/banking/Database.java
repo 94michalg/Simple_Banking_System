@@ -91,7 +91,7 @@ public class Database implements AccountDAO {
 
     public void withdrawMoney(int amount, String cardNumber) {
         try (final Connection connection = dataSource.getConnection();
-             final PreparedStatement statement = connection.prepareStatement(ADD_INCOME)) {
+             final PreparedStatement statement = connection.prepareStatement(WITHDRAW_MONEY)) {
             statement.setInt(1, amount);
             statement.setString(2, cardNumber);
             statement.executeUpdate();
