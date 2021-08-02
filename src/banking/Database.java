@@ -11,6 +11,7 @@ public class Database implements AccountDAO {
         this.dataSource = dataSource;
     }
 
+    // Erase and create a new table at the start
     public void init() {
         try (final Connection connection = dataSource.getConnection();
              final Statement statement = connection.createStatement()) {
@@ -21,6 +22,7 @@ public class Database implements AccountDAO {
         }
     }
 
+    // Add new account to the table
     public void addNewAccount(Account newAccount) {
         try (final Connection connection = dataSource.getConnection();
              final PreparedStatement statement = connection.prepareStatement(INSERT)) {
@@ -32,6 +34,7 @@ public class Database implements AccountDAO {
         }
     }
 
+    // Find account by card number, if not found returns null
     public Account findByNumber(String cardNumber) {
         try (final Connection connection = dataSource.getConnection();
              final PreparedStatement statement = connection.prepareStatement(FIND_BY_NUMBER)) {
@@ -51,6 +54,7 @@ public class Database implements AccountDAO {
         }
     }
 
+    // Add some income to account
     public void addIncomeToAccount(int amount, String cardNumber) {
         try (final Connection connection = dataSource.getConnection();
              final PreparedStatement statement = connection.prepareStatement(ADD_INCOME)) {
@@ -62,6 +66,7 @@ public class Database implements AccountDAO {
         }
     }
 
+    // Get balance of account by card number
     public int getBalance(String cardNumber) {
         try (final Connection connection = dataSource.getConnection();
              final PreparedStatement statement = connection.prepareStatement(GET_BALANCE)) {
@@ -79,6 +84,7 @@ public class Database implements AccountDAO {
         return -1;
     }
 
+    // Close account
     public void closeAccount(String cardNumber) {
         try (final Connection connection = dataSource.getConnection();
              final PreparedStatement statement = connection.prepareStatement(DELETE_ACCOUNT)) {
@@ -89,6 +95,7 @@ public class Database implements AccountDAO {
         }
     }
 
+    // Withdraw money
     public void withdrawMoney(int amount, String cardNumber) {
         try (final Connection connection = dataSource.getConnection();
              final PreparedStatement statement = connection.prepareStatement(WITHDRAW_MONEY)) {

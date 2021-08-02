@@ -23,6 +23,7 @@ public class UI {
 
         loop:
         while (true) {
+            // Client is not logged in, so he can only create new acc or log in
             if (!loggedIn) {
                 System.out.println("1. Create account\n" +
                         "2. Log into account\n" +
@@ -42,6 +43,8 @@ public class UI {
                         System.out.println("Wrong input, try again!");
                         break;
                 }
+                // User logged in, he can check balance, add income, make a transfer,
+                // log out or close his account
             } else {
                 System.out.println("\n" +
                         "1. Balance\n" +
@@ -84,6 +87,7 @@ public class UI {
         System.out.println("Bye!");
     }
 
+    // Returns true if the card number and pin code are valid, false otherwise
     private boolean login() {
         Scanner scan = new Scanner(System.in);
         System.out.println("Enter your card number:");
@@ -102,6 +106,8 @@ public class UI {
         }
     }
 
+    // Generates new account and adds it to the database
+    // Card number always starts with "400000", last number is checked by luhn algorithm
     private void createNewAccount() {
         Random random = new Random();
         int pin = random.nextInt(9000) + 1000;
@@ -124,6 +130,7 @@ public class UI {
         System.out.println();
     }
 
+    // Generates last digit of card number using luhn algorithm
     private int luhnAlgorithm(String cardNumber) {
         int[] array = new int[cardNumber.length()];
         int sum = 0;
@@ -138,9 +145,10 @@ public class UI {
             sum += array[i];
         }
         int lastDigit = sum % 10;
-        return Math.abs(10 - lastDigit);
+        return lastDigit == 0 ? 0 : Math.abs(10 - lastDigit);
     }
 
+    // Add income to the account
     private void addIncome(Account account) {
         Scanner scan = new Scanner(System.in);
         System.out.println("Enter income:");
@@ -150,16 +158,19 @@ public class UI {
         System.out.println("Income was added!");
     }
 
+    // Get balance of the account
     private void getBalance(Account account) {
         int balance = db.getBalance(account.getCardNumber());
         System.out.println("Balance: " + balance);
     }
 
+    // Close the account
     private void closeAccount(Account account) {
         db.closeAccount(account.getCardNumber());
         System.out.println("The account has been closed!");
     }
 
+    // Makes a transfer from one account to another one
     private void transferMoney(Account account) {
         Scanner scan = new Scanner(System.in);
         System.out.println("Transfer \n Enter card number:");
@@ -184,6 +195,7 @@ public class UI {
         }
     }
 
+    // Checks if the card number is valid using luhn algorithm
     private boolean checkCardNumber(String cardNumber) {
         if (cardNumber.length() != 16) {
             return false;
